@@ -1,0 +1,24 @@
+- job: macOS
+  displayName: macOS Build 
+  pool: {vmImage: 'macOS-10.15'}
+  variables:
+    WITH_CYTHON: true
+    CIBW_TEST_COMMAND: "python3 {}/runtests.py -v"
+    CIBW_SKIP="?p27* pp*"
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.8'
+      name: Setup Python
+      
+    - bash: |
+        python3 -m pip install --upgrade pip setuptools wheel
+        pip3 install -r requirements.txt
+        python3 setup.py build_ext -i  -vv --warnings
+      
+    - bash: |
+        pip3 install cibuildwheel==1.4.1
+        cibuildwheel --output-dir wheelhouse .
+        
+    - task: PublishBuildArtifacts@1
+      inputs: {pathtoPublish: 'wheelhouse'}
