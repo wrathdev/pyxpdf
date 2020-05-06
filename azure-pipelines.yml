@@ -55,6 +55,6 @@ jobs:
         isDraft: true
         changeLogCompareToRelease: 'lastFullRelease'
         changeLogType: 'commitBased'
-        assets: $(Build.ArtifactStagingDirectory)/*
+        assets: wheelhouse/*
       displayName: "Create Github Release"
 
