@@ -55,6 +55,6 @@ jobs:
         isDraft: true
         changeLogCompareToRelease: 'lastFullRelease'
         changeLogType: 'commitBased'
-        assets: $(Build.ArtifactStagingDirectory)/macOSwheels/*
+        assets: $(Build.ArtifactStagingDirectory)/*
       displayName: "Create Github Release"
 
