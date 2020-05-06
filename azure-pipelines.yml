@@ -11,7 +11,10 @@ jobs:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.8'
-      
+    - bash: |
+        brew postinstall openssl
+        export SSL_CERT_FILE=$(brew --prefix)/etc/openssl/cert.pem
+        echo "##vso[task.setvariable variable=SSL_CERT_FILE]$SSL_CERT_FILE"
     - bash: |
         python3 -m pip install --upgrade pip setuptools wheel
         pip3 install -r requirements.txt
