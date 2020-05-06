@@ -1,3 +1,4 @@
+jobs:
 - job: macOS
   displayName: macOS Build 
   pool: {vmImage: 'macOS-10.15'}
