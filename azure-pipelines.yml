@@ -27,5 +27,19 @@ jobs:
     - task: PublishBuildArtifacts@1
       inputs: 
         pathtoPublish: 'wheelhouse'
-        ArtifactName: 'macOS wheels'
+        ArtifactName: 'macOSwheels'
+
+    - task: GitHubRelease@1
+      inputs:
+        gitHubConnection: 'github.com_wrathdev'
+        repositoryName: '$(Build.Repository.Name)'
+        action: 'create'
+        target: '$(Build.SourceVersion)'
+        tagSource: 'gitTag'
+        tagPattern: 'v.+'
+        releaseNotesSource: 'inline'
+        isDraft: true
+        changeLogCompareToRelease: 'lastFullRelease'
+        changeLogType: 'commitBased'
+        assets: $(Build.ArtifactStagingDirectory)/macOSwheels/*
 
