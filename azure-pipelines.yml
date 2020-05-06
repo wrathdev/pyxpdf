@@ -4,8 +4,9 @@ jobs:
   pool: {vmImage: 'macOS-10.15'}
   variables:
     WITH_CYTHON: true
-    CIBW_TEST_COMMAND: "python3 {}/runtests.py -v"
+    CIBW_TEST_COMMAND: "python3 {project}/runtests.py -v"
     CIBW_SKIP: "?p27* pp*"
+    CFLAGS: "-std=c++14"
   steps:
     - task: UsePythonVersion@0
       inputs:
