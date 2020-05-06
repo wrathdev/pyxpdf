@@ -25,4 +25,7 @@ jobs:
         cibuildwheel --output-dir wheelhouse .
         
     - task: PublishBuildArtifacts@1
-      inputs: {pathtoPublish: 'wheelhouse'}
+      inputs: 
+        pathtoPublish: 'wheelhouse'
+        ArtifactName: 'macOS wheels'
+
