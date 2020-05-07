@@ -69,22 +69,8 @@ run_test()
 export PYTHON
 export PIP
 
-if [ "$USE_WHEEL" == "true" ] && [ $# -eq 0 ]; then
-  # ensure some warnings are not issued
-  export CFLAGS=$CFLAGS" -Wno-sign-compare -Wno-unused-result"
 
-  $PYTHON setup.py build  --warnings --with-cython bdist_wheel 
-  # Make virtualenv to install into
-  virtualenv --python=`which $PYTHON` venv-for-wheel
-  . venv-for-wheel/bin/activate
-  # Move out of source directory to avoid finding local pyxpdf
-  pushd dist
-  $PIP install -vv --pre --no-index --upgrade --find-links=. pyxpdf
-  popd
-
-  run_test
-
-elif [ "$USE_SDIST" == "true" ] && [ $# -eq 0 ]; then
+if [ "$USE_SDIST" == "true" ] && [ $# -eq 0 ]; then
   # ensure some warnings are not issued
   export CFLAGS=$CFLAGS" -Wno-sign-compare -Wno-unused-result"
   if [ -n "$RUN_COVERAGE" ]; then
