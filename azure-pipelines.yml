@@ -36,7 +36,7 @@ jobs:
       
     - bash: |
         pip3 install cibuildwheel==1.4.1
-        cibuildwheel --output-dir wheelhouse .
+        cibuildwheel --output-dir .
       displayName: "Build Wheels"
         
     - task: PublishBuildArtifacts@1
@@ -44,5 +44,19 @@ jobs:
         pathtoPublish: 'wheelhouse'
         ArtifactName: 'macOSwheels'
       displayName: "Create Artifacts"
+
+    - task: GitHubRelease@1
+      inputs:
+        gitHubConnection: 'github.com_wrathdev'
+        repositoryName: '$(Build.Repository.Name)'
+        action: 'create'
+        target: '$(Build.SourceVersion)'
+        tagSource: 'gitTag'
+        tagPattern: 'v.+'
+        releaseNotesSource: 'inline'
+        assets: 'wheelhouse/*'
+        changeLogCompareToRelease: 'lastFullRelease'
+        changeLogType: 'commitBased' 
+
 
     
