@@ -36,7 +36,7 @@ jobs:
       
     - bash: |
         pip3 install cibuildwheel==1.4.1
-        cibuildwheel --output-dir .
+        cibuildwheel --output-dir wheelhouse .
       displayName: "Build Wheels"
         
     - task: PublishBuildArtifacts@1
