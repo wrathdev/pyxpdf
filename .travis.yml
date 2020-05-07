@@ -61,6 +61,7 @@ script:
       cibuildwheel --output-dir dist
     else
       bash ./build_tools/travis_test.sh
+    fi
 
 # after_success:
 #   - bash ./build_tools/travis-upload-wheel.sh
