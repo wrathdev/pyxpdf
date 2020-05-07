@@ -20,7 +20,7 @@ cache:
 env:
   global:
     - WITH_CYTHON="true"
-    - CIBW_TEST_COMMAND="python runtests.py -v"
+#     - CIBW_TEST_COMMAND="python runtests.py -v"
     - CIBW_SKIP="?p27* pp*"
 
 stages:
