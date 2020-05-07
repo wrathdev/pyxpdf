@@ -26,11 +26,13 @@ jobs:
         echo "##vso[task.setvariable variable=SSL_CERT_FILE]$SSL_CERT_FILE"
       displayName: "Update SSL Certs"
 
-    # - bash: |
-    #     python3 -m pip install --upgrade pip setuptools wheel
-    #     pip3 install -r requirements.txt
-    #     python3 setup.py build_ext -i  -vv --warnings
-    #   displayName: "Initial Build Tests"
+    - bash: |
+        python3 -m pip install --upgrade pip setuptools wheel
+        pip3 install -r requirements.txt
+        python3 setup.py build_ext -i  -vv --warnings
+        python3 runtests.py -vv
+        make clean
+      displayName: "Initial Build Tests"
       
     - bash: |
         pip3 install cibuildwheel==1.4.1
@@ -43,18 +45,4 @@ jobs:
         ArtifactName: 'macOSwheels'
       displayName: "Create Artifacts"
 
-    - task: GitHubRelease@1
-      inputs:
-        gitHubConnection: 'github.com_wrathdev'
-        repositoryName: '$(Build.Repository.Name)'
-        action: 'create'
-        target: '$(Build.SourceVersion)'
-        tagSource: 'gitTag'
-        tagPattern: 'v.+'
-        releaseNotesSource: 'inline'
-        isDraft: true
-        changeLogCompareToRelease: 'lastFullRelease'
-        changeLogType: 'commitBased'
-        assets: wheelhouse/*
-      displayName: "Create Github Release"
-
+    
