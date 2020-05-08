@@ -47,8 +47,9 @@ jobs:
         pip install -r requirements.txt
         python setup.py build_ext -i  -vv --warnings
         python runtests.py -vv
-        make clean
+        make clean 2>/dev/null
       displayName: "Initial Build Tests"
+      failOnStderr: true
       
     - bash: |
         pip3 install cibuildwheel==1.4.1
