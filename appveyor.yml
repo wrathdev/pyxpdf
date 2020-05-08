@@ -12,8 +12,8 @@ image:
 #     - '**/*.md'
 environment:
   WITH_CYTHON: true
-  CIBW_SKIP: "?p27* cp35-* cp36-* pp*"
-  CIBW_BEFORE_BUILD: pip install -r {project}\requirements.txt
+  CIBW_SKIP: "?p27* pp*"
+  CIBW_BEFORE_BUILD: pip install -r {project}\requirements.txt && rmdir /S /Q libs || echo "No libs"
   CIBW_BUILD_VERBOSITY: 3
 
 
