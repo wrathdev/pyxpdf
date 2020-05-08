@@ -68,8 +68,8 @@ jobs:
             inputs:
               buildType: 'current'
               downloadType: 'specific'
-              downloadPath: '$(System.ArtifactsDirectory)/wheelhouse'
-          - bash: ls -lh $(System.ArtifactsDirectory) $(System.ArtifactsDirectory)/wheelhouse
+              downloadPath: 'wheelhouse'
+          - bash: wheelhouse
           - task: GitHubRelease@1
             inputs:
               gitHubConnection: 'github.com_wrathdev'
