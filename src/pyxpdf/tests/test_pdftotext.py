@@ -19,7 +19,7 @@ class PTT_TestCase(InitGlobalTextCase):
 
     def test_pdftotext(self):
         text_raw = pdftotext(self.mandarin_pdf, end=1)
-        self.assertEqual(text_raw, self.text_raw.decode('utf8'))
+        self.assertEqual(text_raw..encode('utf8'), self.text_raw)
 
 def test_suite():
     suite = unittest.TestSuite()
