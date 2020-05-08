@@ -72,7 +72,8 @@ before_deploy:
 deploy:
   # Deploy on tags to GitHub Releases
   - provider: releases
-    token: GITHUB_TOKEN
+    token:
+      secure: "bEz6Pkofkoqkwo8NZ3+rZnO+uCvwvrOt8UT5gXXb3ZYfurm5L0Pl14lXuTTTUVGO22M9xNVdMFQwBAvTiie2Op3RbLYdSyaZSms16HgZRAlbUgexRhEmzvPLSGgBkevRWoQ6M4cO4gJy8/eawp3ZL3XNuhDzf60YhXQxG4/IKHRWpeoTCKDXKnBiHMNt2J97nyu8HTb5PdVO9CDVP3eFv7GCgkY1/binhHMl0POECspmr2qWPsvZwgq/+z+s8Cwkfk7PqALrt4GpZyezILyF8ubmMaq7qUa4Nixn4xAQS3PyqgnliJjnHYnZo1j7yxWeuD/OEthLou3unhk+QOQ+rexnIJXqh3bdB+8npRLi+chHAC/70b0dvOu4lEfTro6HDVBiqdqZH0Cs+AdqGHkx8p1NIeWyOEvwHZrSPmmqk89Zsta2imMHmF3vJtaWKOOOzHixX8vuJfC7mAr+nGWghGevEF7qVs8eIgq2nr1XbxOIuAQSJk+OeqSo9bdz2NwLWnCJCQqPhK6OK8O+rf5iYKKZUOHLgyKj+RrTORxfRRKTGnHGEQyxnyWym+4fsGGM8HrCvhiD92YVEpsCKgO+o6+pDsVfX/UZeqPqrPtDtGJtlpPYl8+LaCk0sUYo36KHsL+UAajx0d+MPE3V8SDmY2TXLGw0Dr8adutGiX+bYKo="
     file_glob: true
     file: "dist/*"
     on:
