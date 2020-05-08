@@ -50,6 +50,7 @@ cpdef pdftotext_raw(pdf_file, int start = 0, int end = 0, ownerpass=None,
     if cfg_file is not None:
         Config.load_file(cfg_file)
     Config.text_encoding = "UTF-8"
+    print("Config.text_eol=" + Config.text_eol)
 
     if ownerpass:
         ownerpassG = make_unique[GString](_chars(ownerpass))
