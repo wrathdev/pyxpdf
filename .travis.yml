@@ -20,8 +20,6 @@ cache:
 env:
   global:
     - WITH_CYTHON="true"
-#     - CIBW_TEST_COMMAND="python runtests.py -v"
-    - CIBW_SKIP="?p27* pp*"
 
 stages:
     # Do the style check and a single test job, don't proceed if it fails
@@ -32,77 +30,25 @@ stages:
 jobs:
   include:
     # Do all python versions without environment variables set
-#     - stage: Initial tests
-#       python: 3.6
+    - stage: Initial tests
+      python: 3.6
     - stage: Comprehensive tests
-      python: 3.8
-      env: USE_SDIST=true
-#     - python: 3.8
-#       env: BUILD_WHEEL=true 
-#     - python: 3.8
-#       env: WITH_CYTHON=true USE_SDIST=true WITH_COVERAGE=true
-#     - python: 2.7
-#   allow_failures:
-#     - python: 2.7
+    - python: 3.8
+      env: USE_SDIST=true WITH_COVERAGE=true
+    - python: 2.7
+  allow_failures:
+    - python: 2.7
    
 
 before_install:
-   - |
-     if [ "${BUILD_WHEEL:-}" != "" ]; then
-       pip install -r requirements.txt
-       pip install cibuildwheel==1.4.1
-     else
-       bash ./build_tools/travis_before_install.sh
-     fi
+  - bash ./build_tools/travis_before_install.sh
+
 
 script:
-  - |
-    if [ "${BUILD_WHEEL:-}" != "" ]; then
-      cibuildwheel --output-dir dist
-    else
-      bash ./build_tools/travis_test.sh
-    fi
+  - bash ./build_tools/travis_test.sh
 
 # after_success:
 #   - bash ./build_tools/travis-upload-wheel.sh
 
-before_deploy:
-  - ls dist/
 
-deploy:
-  # Deploy on tags to GitHub Releases
-  - provider: releases
-    token:
-      secure: "bEz6Pkofkoqkwo8NZ3+rZnO+uCvwvrOt8UT5gXXb3ZYfurm5L0Pl14lXuTTTUVGO22M9xNVdMFQwBAvTiie2Op3RbLYdSyaZSms16HgZRAlbUgexRhEmzvPLSGgBkevRWoQ6M4cO4gJy8/eawp3ZL3XNuhDzf60YhXQxG4/IKHRWpeoTCKDXKnBiHMNt2J97nyu8HTb5PdVO9CDVP3eFv7GCgkY1/binhHMl0POECspmr2qWPsvZwgq/+z+s8Cwkfk7PqALrt4GpZyezILyF8ubmMaq7qUa4Nixn4xAQS3PyqgnliJjnHYnZo1j7yxWeuD/OEthLou3unhk+QOQ+rexnIJXqh3bdB+8npRLi+chHAC/70b0dvOu4lEfTro6HDVBiqdqZH0Cs+AdqGHkx8p1NIeWyOEvwHZrSPmmqk89Zsta2imMHmF3vJtaWKOOOzHixX8vuJfC7mAr+nGWghGevEF7qVs8eIgq2nr1XbxOIuAQSJk+OeqSo9bdz2NwLWnCJCQqPhK6OK8O+rf5iYKKZUOHLgyKj+RrTORxfRRKTGnHGEQyxnyWym+4fsGGM8HrCvhiD92YVEpsCKgO+o6+pDsVfX/UZeqPqrPtDtGJtlpPYl8+LaCk0sUYo36KHsL+UAajx0d+MPE3V8SDmY2TXLGw0Dr8adutGiX+bYKo="
-    file_glob: true
-    file: "dist/*"
-    on:
-      repo: wrathdev/pyxpdf
-      tags: true
-      condition: ${WITH_COVERAGE:-false}${USE_SDIST:-}${BUILD_WHEEL:-} != false
-#   # Deploy master non-tags to test PyPI
-#   - provider: pypi
-#     server: https://test.pypi.org/legacy/
-#     user: __token__
-#     password:
-#       secure: Fmy8nwaENUtGLhnZTAlOS+innLmY5TPzWzQOsRirRgdOpxQ/XIabrZwVmk80+RqOkvY4okOXq43jhPmla8FZFOIo3LvkI81FcC9FHF6O93GQC5bjYdljaELCPRGxXxgp86fW5iwg5NXi6f2X7207F9RZOheuPyDIE7J0V2MJghbolIRzDC5IfHHuj3jmAMMadco571QWjLSEZ9xYlZURlhxo8IWYDU7ajSx5nFYAi0bD7Y49vjUcc4JfTsou4vVg1Y9a9hBChPZguPwss7hkh3dnFUJ1Vc10aeuhiNK/fwqKDKB4ebFMkc02aZmI6EsN5DtxTOEMhZWMrYOt4Os1xVLdvPckoBXIGz4089BoQP7GCImq/0KKHeK0NqfEIJ47A4gNc5rXmw4MIJNlwGtvceZUQy9eeyKiKXq0BuAqY3V2yozzasMbE/LV/MsosL6Qs/9W5csRdq7MJBB1y8TbrKd4UFfJ7cUovfVxhTEitPCyDMNzofpXV79L3U3I3VgXinmL2kFnSh/wf3/75lIU8FyrOpvAvPaj+sC/tXxIGy/EhrndXIelOicZDKvjm0g2cf/M7eytAUh9fkQI8pQJB5OSXP9OgheJ4kL4qBL2/yCqKdASuVH9mLNs2ZsPmdFVi4WNqLx1RvYZwYBHKzgRoVV/3s+EWXUoM1YjwPopnqo=
-#     distributions: clean_ext
-#     skip_existing: true
-#     skip_cleanup: true
-#     on:
-#       repo: mayeut/pybase64
-#       tags: false
-#       branch: master
-#       condition: -z "${PYBASE64_TOX:-}${PYBASE64_VALGRIND:-}${PYBASE64_DOC:-}"
-#   # Deploy on tags to PyPI
-#   - provider: pypi
-#     user: __token__
-#     password:
-#       secure: KQ/FVMKw8prgfPkna0alL6zYrNXryFGvT/Qgj05Ysp5RyuL3Uvo5ZeQfRwdNZmaHgjOgt7u3PnAbYL3eYJBIF9mpCSpaSs6NWXQwoDIt8JGaDPDqbFxWngFN0x3CxwsPsawIeMNeHQawkqRKomIqf/IBQWoGeAptfgTAXXD4u6ym7EDE0sB3a6zgdUrL3ukTB3K673LQAquxHu/BkkqOC+hj9Wp2muIGoWjW+0T8AstGsPq2+K9gi2vKxOzDKtI9opM7hl22gqyaOiEVKi40Tu97iAF/Sa0F5ODD+5AM5MzC11vBxose918Ogzcl0M6hfMRnD53yNDPEpuNyQ2aT+GA5gK6occ8lbb7K+QEoUpGGLCFUeiSdDWbtG2WplngnAPgOhHpy1/7mICn6MrPTF71HR/h1pniNoyo03Is72ujn5zvhvZoGS1wNGIwMczxO9AwcWO5cbzr5CnP15Y5dKa+QFxifO+zXGhLjG58Q6sc/1bhijy5WUiMM6NPMmGIsPj0WDOGI5CvRPLNMn3TlONrrbCxtaPnfQGbdu5QFQ6UwcpQOX9U6bKLJ5lwCc46Tt4hoZEj0hJJEKaRZ/mPsC2meYbQ3m6ErItG+KzzI7mQGuoG2zwwHjKnM3XYKuArDRv5QeR+jMFZJ0JGS8vs6c86rqe/a70K0Bvnprbfd2+M=
-#     distributions: clean_ext
-#     skip_existing: true
-#     skip_cleanup: true
-#     on:
-#       repo: mayeut/pybase64
-#       tags: true
-#       condition: -z "${PYBASE64_TOX:-}${PYBASE64_VALGRIND:-}${PYBASE64_DOC:-}"
+
