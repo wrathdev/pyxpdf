@@ -7,14 +7,14 @@ trigger:
       - v*
 
 jobs:
-- job: macOS
+- job: Build
   strategy:
     maxParallel: 4
     matrix:
-      LinuxBuild:
+      LinuxWheels:
         imageName: 'ubuntu-latest'
         artifactName: linuxwheels
-      MacBuild:
+      MacWheels:
         imageName: 'macOS-10.15'
         artifactName: macwheels
   pool: { vmImage: $(imageName) }
@@ -66,9 +66,12 @@ jobs:
           - task: DownloadBuildArtifacts@0
             inputs:
               buildType: 'current'
-              downloadType: 'specific'
+              downloadType: 'single'
+              itemPattern: |
+                macwheels/**
+                linuxwheels/**
               downloadPath: '$(System.ArtifactsDirectory)/wheelhouse'
-          - bash: ls -lh . wheelhouse
+          - bash: ls -lh $(System.ArtifactsDirectory)/ $(System.ArtifactsDirectory)/wheelhouse
           - task: GitHubRelease@1
             inputs:
               gitHubConnection: 'github.com_wrathdev'
@@ -78,7 +81,7 @@ jobs:
               tagSource: 'gitTag'
               tagPattern: 'v.+'
               releaseNotesSource: 'inline'
-              assets: 'wheelhouse/*'
+              assets: 'wheelhouse/**/*'
               changeLogCompareToRelease: 'lastFullRelease'
               changeLogType: 'commitBased'
               isDraft: true
