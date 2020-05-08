@@ -13,6 +13,8 @@ image:
 environment:
   WITH_CYTHON: true
   CIBW_SKIP: "?p27* pp*"
+  CIBW_BEFORE_BUILD: pip install {project}\\requirements.txt
+
 
 init:
 - cmd: set PATH=C:\Python38;C:\Python38\Scripts;%PATH%
@@ -28,7 +30,6 @@ build_script:
   - python -u setup.py build_ext -i --warnings
   - python -u runtests.py -vv 
   - del /F /Q "src\pyxpdf\*.cpp" "src\pyxpdf\*.pyd" 2>NUL || echo
-  - set WITH_CYTHON=true
   - python -m cibuildwheel --output-dir wheelhouse
 
 artifacts:
