@@ -21,7 +21,7 @@ jobs:
   variables:
     WITH_CYTHON: true
 #     CIBW_TEST_COMMAND: "python3 {project}/runtests.py -v"
-    CIBW_BUILD: cp38-*
+    CIBW_SKIP: "?p27* pp*"
     CFLAGS: "-std=c++14"
   steps:
     - task: UsePythonVersion@0
@@ -82,7 +82,6 @@ jobs:
               assets: 'wheelhouse/**/*'
               changeLogCompareToRelease: 'lastFullRelease'
               changeLogType: 'commitBased'
-              isDraft: true
 
 
 
