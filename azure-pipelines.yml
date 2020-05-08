@@ -8,8 +8,16 @@ trigger:
 
 jobs:
 - job: macOS
-  displayName: macOS Build 
-  pool: {vmImage: 'macOS-10.15'}
+  strategy:
+    maxParallel: 4
+    matrix:
+      LinuxBuild:
+        imageName: 'ubuntu-latest'
+        artifactName: linuxwheels
+      MacBuild:
+        imageName: 'macOS-10.15'
+        artifactName: macwheels
+  pool: { vmImage: $(imageName) }
   variables:
     WITH_CYTHON: true
 #     CIBW_TEST_COMMAND: "python3 {project}/runtests.py -v"
@@ -25,6 +33,7 @@ jobs:
         export SSL_CERT_FILE=$(brew --prefix)/etc/openssl/cert.pem
         echo "##vso[task.setvariable variable=SSL_CERT_FILE]$SSL_CERT_FILE"
       displayName: "Update SSL Certs"
+      condition: contains(variables['imageName'], 'macOS')
 
     - bash: |
         python3 -m pip install --upgrade pip setuptools wheel
@@ -42,21 +51,38 @@ jobs:
     - task: PublishBuildArtifacts@1
       inputs: 
         pathtoPublish: 'wheelhouse'
-        ArtifactName: 'macOSwheels'
+        ArtifactName: $(artifactName)
       displayName: "Create Artifacts"
 
-    - task: GitHubRelease@1
-      inputs:
-        gitHubConnection: 'github.com_wrathdev'
-        repositoryName: '$(Build.Repository.Name)'
-        action: 'create'
-        target: '$(Build.SourceVersion)'
-        tagSource: 'gitTag'
-        tagPattern: 'v.+'
-        releaseNotesSource: 'inline'
-        assets: 'wheelhouse/*'
-        changeLogCompareToRelease: 'lastFullRelease'
-        changeLogType: 'commitBased' 
+- deployment: publishWheels
+  displayName: Make Github Release
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+  strategy: 
+    runOnce:
+      deploy:
+        pool: {vmImage: "ubuntu-latest"}
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)/wheelhouse'
+          - bash: ls -lh . wheelhouse
+          - task: GitHubRelease@1
+            inputs:
+              gitHubConnection: 'github.com_wrathdev'
+              repositoryName: '$(Build.Repository.Name)'
+              action: 'create'
+              target: '$(Build.SourceVersion)'
+              tagSource: 'gitTag'
+              tagPattern: 'v.+'
+              releaseNotesSource: 'inline'
+              assets: 'wheelhouse/*'
+              changeLogCompareToRelease: 'lastFullRelease'
+              changeLogType: 'commitBased'
+              isDraft: true
+
+
 
 
     
