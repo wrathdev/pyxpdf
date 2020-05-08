@@ -72,7 +72,7 @@ before_deploy:
 deploy:
   # Deploy on tags to GitHub Releases
   - provider: releases
-#     token: GITHUB_TOKEN
+    token: GITHUB_TOKEN
     file_glob: true
     file: "dist/*"
     on:
