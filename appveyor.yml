@@ -28,6 +28,7 @@ build_script:
   - python -u setup.py build_ext -i --warnings
   - python -u runtests.py -vv 
   - del /F /Q "src\pyxpdf\*.cpp" "src\pyxpdf\*.pyd" 2>NUL || echo
+  - set WITH_CYTHON=true
   - python -m cibuildwheel --output-dir wheelhouse
 
 artifacts:
