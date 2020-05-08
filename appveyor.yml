@@ -13,7 +13,7 @@ image:
 environment:
   WITH_CYTHON: true
   CIBW_SKIP: "?p27* pp*"
-  CIBW_BEFORE_BUILD: pip install {project}\\requirements.txt
+  CIBW_BEFORE_BUILD: pip install -r {project}\requirements.txt
 
 
 init:
