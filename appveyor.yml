@@ -12,7 +12,7 @@ image:
 #     - '**/*.md'
 environment:
   WITH_CYTHON: true
-  CIBW_SKIP: "?p27* pp*"
+  CIBW_SKIP: "?p27* cp36-* pp*"
   CIBW_BEFORE_BUILD: pip install -r {project}\requirements.txt
 
 
