@@ -14,20 +14,27 @@ jobs:
       LinuxWheels:
         imageName: 'ubuntu-latest'
         artifactName: linuxwheels
+        CFLAGS: "-std=c++14"
       MacWheels:
         imageName: 'macOS-10.15'
         artifactName: macwheels
+        CFLAGS: "-std=c++14"
+      WinWheels:
+        imageName: 'windows-latest'
+        artifactName: winwheels
+        CIBW_BEFORE_BUILD_WINDOWS: pip install -r {project}\requirements.txt && rmdir /S /Q libs || echo "No libs"
   pool: { vmImage: $(imageName) }
   variables:
     WITH_CYTHON: true
 #     CIBW_TEST_COMMAND: "python3 {project}/runtests.py -v"
     CIBW_SKIP: "?p27* pp*"
-    CFLAGS: "-std=c++14"
+    CIBW_BUILD_VERBOSITY: 1
   steps:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.8'
       displayName: "Python Setup"
+      
     - bash: |
         brew postinstall openssl
         export SSL_CERT_FILE=$(brew --prefix)/etc/openssl/cert.pem
