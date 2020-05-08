@@ -33,7 +33,7 @@ jobs:
     - stage: Initial tests
       python: 3.6
     - stage: Comprehensive tests
-    - python: 3.8
+      python: 3.8
       env: USE_SDIST=true WITH_COVERAGE=true
     - python: 2.7
   allow_failures:
