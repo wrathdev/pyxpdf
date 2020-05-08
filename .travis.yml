@@ -32,18 +32,18 @@ stages:
 jobs:
   include:
     # Do all python versions without environment variables set
-    - stage: Initial tests
-      python: 3.6
+#     - stage: Initial tests
+#       python: 3.6
     - stage: Comprehensive tests
       python: 3.8
       env: USE_SDIST=true
-    - python: 3.8
-      env: BUILD_WHEEL=true 
-    - python: 3.8
-      env: WITH_CYTHON=true USE_SDIST=true WITH_COVERAGE=true
-    - python: 2.7
-  allow_failures:
-    - python: 2.7
+#     - python: 3.8
+#       env: BUILD_WHEEL=true 
+#     - python: 3.8
+#       env: WITH_CYTHON=true USE_SDIST=true WITH_COVERAGE=true
+#     - python: 2.7
+#   allow_failures:
+#     - python: 2.7
    
 
 before_install:
@@ -72,7 +72,7 @@ before_deploy:
 deploy:
   # Deploy on tags to GitHub Releases
   - provider: releases
-    token: fcca96ca4fa9800898f103aa1ca30fabdbab0711
+#     token: GITHUB_TOKEN
     file_glob: true
     file: "dist/*"
     on:
