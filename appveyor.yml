@@ -14,6 +14,7 @@ environment:
   WITH_CYTHON: true
   CIBW_SKIP: "?p27* cp36-* pp*"
   CIBW_BEFORE_BUILD: pip install -r {project}\requirements.txt
+  CIBW_BUILD_VERBOSITY: 3
 
 
 init:
@@ -30,7 +31,7 @@ build_script:
   - python -u setup.py build_ext -i --warnings
   - python -u runtests.py -vv 
   - del /F /Q "src\pyxpdf\*.cpp" "src\pyxpdf\*.pyd" 2>NUL || echo
-  - python -m cibuildwheel -vvv --output-dir wheelhouse
+  - python -m cibuildwheel --output-dir wheelhouse
 
 artifacts:
   - path: "wheelhouse\\*.whl"
