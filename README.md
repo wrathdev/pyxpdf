@@ -16,15 +16,6 @@ doc = Document("samples/nonfree/mandarin.pdf")
 with open("samples/nonfree/mandarin.pdf", 'rb') as fp:
     doc = Document(fp)
 
-# get pdf metadata dict
-print(doc.info())
-# >>> doc.info()
-# {'CreationDate': "D:20080721141207-04'00'", 
-#  'Subject': 'Chinese Version of Universal PCXR8 ...', 
-#  'Author': 'SKC Inc.', 
-#  'Creator': 'PScript5.dll
-#   .....
-
 # get all text
 all_text = doc.text()
 
