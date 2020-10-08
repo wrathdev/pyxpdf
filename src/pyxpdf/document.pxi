@@ -16,8 +16,9 @@ from pyxpdf.includes.PDFDoc cimport PDFDoc
 # Change import name as it was conflicting with cdef classes
 from pyxpdf.includes.Page cimport Page as XPage
 from pyxpdf.includes.OutputDev cimport OutputDev
-from pyxpdf.includes.TextOutputDev cimport TextOutputDev, TextPage, TextOutputControl
 from pyxpdf.includes.Catalog cimport Catalog
+from pyxpdf.includes.TextOutputDev cimport TextOutputDev, TextPage, TextOutputControl
+
 
 
 cdef class Document:
@@ -61,10 +62,7 @@ cdef class Document:
             return GString_to_unicode(meta.get())
         return None
 
-    cdef _load_from_file(self, GString *pdf):
-        self.doc = new PDFDoc(pdf, self.ownerpass, self.userpass)
-        if self.doc == NULL:
-            raise MemoryError("Cannot allocate memory for internal objects")
+   
         
     cdef _load_from_char_array(self, char *pdf, int data_length):
         cdef Object *obj_null = new Object()
@@ -72,7 +70,11 @@ cdef class Document:
         if mem_stream == NULL:
             raise MemoryError("Cannot allocate memory for internal objects")
         self.doc = new PDFDoc(mem_stream, self.ownerpass, self.userpass)
-
+      
+    cdef _load_from_file(self, GString *pdf):
+        self.doc = new PDFDoc(pdf, self.ownerpass, self.userpass)
+        if self.doc == NULL:
+            raise MemoryError("Cannot allocate memory for internal objects")
     cdef check(self):
         if self.doc.isOk() == gTrue or self.doc.getErrorCode() == errEncrypted:
             if self.doc.getErrorCode() == errEncrypted:
