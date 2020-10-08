@@ -25,17 +25,6 @@ def is_pre_release():
     version_string = version()
     return "a" in version_string or "b" in version_string
 
-
-def dev_status():
-    _version = version()
-    if 'a' in _version:
-        return 'Development Status :: 3 - Alpha'
-    elif 'b' in _version or 'c' in _version:
-        return 'Development Status :: 4 - Beta'
-    else:
-        return 'Development Status :: 5 - Production/Stable'
-
-
 def changes():
     """Extract part of changelog pertaining to version.
     """
@@ -51,6 +40,18 @@ def changes():
             elif line.startswith("### " + _version):
                 lines.append(line)
     return ''.join(lines[:-1])
+
+def dev_status():
+    _version = version()
+    if 'a' in _version:
+        return 'Development Status :: 3 - Alpha'
+    elif 'b' in _version or 'c' in _version:
+        return 'Development Status :: 4 - Beta'
+    else:
+        return 'Development Status :: 5 - Production/Stable'
+
+
+
 
 
 def get_base_dir():
