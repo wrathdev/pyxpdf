@@ -34,14 +34,6 @@ cdef extern from "Decrypt.h" nogil:
         int bufIdx
         
 
-    ctypedef struct DecryptAES256State: 
-        Guint w[60]
-        Guchar state[16]
-        Guchar cbc[16]
-        Guchar buf[16]
-        int bufIdx
-
-
     cdef cppclass DecryptStream(FilterStream):
         DecryptStream(Stream *strA, Guchar *fileKeyA,
                         CryptAlgorithm algoA, int keyLengthA,
@@ -53,7 +45,13 @@ cdef extern from "Decrypt.h" nogil:
         int lookChar()
         GBool isBinary(GBool last)
         Stream *getUndecodedStream() 
-
+        
+    ctypedef struct DecryptAES256State: 
+        Guint w[60]
+        Guchar state[16]
+        Guchar cbc[16]
+        Guchar buf[16]
+        int bufIdx
 
     ctypedef struct MD5State:
         Gulong a, b, c, d
